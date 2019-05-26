@@ -1,9 +1,9 @@
-name: deepin-desktop
-version: 10.15
-summary: Deepin Desktop.
-description: Deepin is an elegant, easy to use and reliable domestic desktop operating system.
+name: i3
+version: 4.16.1
+summary: i3 window manger.
+description: A tiling window manager for X11.
   
-adopt-info:deepin-desktop
+adopt-info:i3
 
 grade: stable
 confinement: devmode
@@ -12,7 +12,7 @@ architectures:
   - build-on: amd64
 
 apps:
-  deepin-desktop:
+    i3:
     command: bash
         slots: [mir, upower-observe]
         plugs:
@@ -24,7 +24,6 @@ apps:
         - unity7
         - pulseaudio
         - network-manager
-        - dde-file-manager
         - udisks2
       
 slots:
@@ -86,31 +85,45 @@ slots:
         name: 
 
 parts:
-  deepin-desktop:
-  deepin:
-        stage-packages: [deepin-workspace-wayland, deepin-desktop, gdb, strace, vim, kwin-wayland-backend-x11, libxkbcommon-x11-0, libxkbcommon0, libx11-data, xkb-data, ltrace, kwrite, lxqt-workspace, konsole, kwin-wayland-backend-drm, libqt5sql5-sqlite]
+  i3:
+  i3:
+        stage-packages: [i3-workspace-wayland, i3, gdb, strace, vim, wayland-backend-x11, libxkbcommon-x11-0, libxkbcommon0, libx11-data, xkb-data, ltrace, kwrite, lxqt-workspace, konsole, kwin-wayland-backend-drm, libqt5sql5-sqlite]
         plugin: dump
         source: empty
         organize:
             usr/bin/Xwayland: usr/bin/Xwayland.orig
     patchy:
-        after: [deepin]
+        after: [i3]
         plugin: dump
         source: xwayland
-    source: https://github.com/linuxdeepin/dde-file-manager.git
-    source-type: git
-    override-pull: |
-      snapcraftctl pull
-      last_committed_tag="$(git describe --tags --abbrev=0)"
-      last_committed_tag_ver="$(echo ${last_committed_tag} | sed 's/v//')"
-      last_released_tag="$(snap info $SNAPCRAFT_PROJECT_NAME| awk '$1 == "beta:" { print $2 }')"
-      # If the latest tag from the upstream project has not been released to
-      # beta, build that tag instead of master.
-      if [ "${last_committed_tag_ver}" != "${last_released_tag}" ]; then
-        git fetch
-        git checkout "${last_committed_tag}"
-      fi
-      snapcraftctl set-version "$(git describe --tags | sed 's/v//')"
+    source: http://http.us.debian.org/debian/i3_4.16.1-1_amd64.deb
+    source-type: deb
+   
     build-packages:
       - git
       - sed
+      - libcairo2 
+      - libev4  
+      - libglib2.0-0 
+      - libpango-1.0-0 
+      - libpangocairo-1.0-0  
+      - libpcre3     
+      - libstartup-notification0 
+      - libxcb-cursor0 
+      - libxcb-icccm4       
+      - libxcb-keysyms1      
+      - libxcb-randr0      
+      - libxcb-util1       
+      - libxcb-xinerama0        
+      - libxcb-xkb1
+      - libxcb-xrm0 
+      - libxcb1 
+      - libxkbcommon-x11-0
+      - libxkbcommon0       
+      - libyajl2         
+      - perl       
+      - fonts-dejavu-core       
+      - libanyevent-i3-perl         
+      - libjson-xs-perl       
+      - rxvt-unicode    
+      - xfonts-base 
