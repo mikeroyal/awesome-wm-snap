@@ -60,14 +60,4 @@ mkdir -p $XDG_RUNTIME_DIR
 ln -sf $SNAP/usr/share/{fontconfig,fonts,fonts-*,themes} $XDG_DATA_HOME
 
 export PATH=$HOME/bin:$PATH
-
-export XLOCALEDIR=$SNAP/usr/share/X11/locale/
-export QT_LOGGING_RULES=*=true
-export QT_LOGGING_TO_CONSOLE=1
-
-qtcdir="$HOME/.local/config/qtchooser/"
-mkdir -p $qtcdir
-echo "$SNAP/usr/lib/x86_64-linux-gnu/qt5/bin" > $qtcdir/5.conf
-echo "$SNAP/usr/lib/x86_64-linux-gnu" >> $qtcdir/5.conf
-
 bash
