@@ -4,7 +4,7 @@
   i3 wm
 </h1>
 
-This is the snap for [i3-wm](https://www.deepin.org/en/dde/), a tiling window manager for X11. It works on Ubuntu, Fedora, Debian, and other major Linux distributions. 
+This is the snap for [i3-wm](https://i3wm.org/), a tiling window manager for X11. It works on Ubuntu, Fedora, Debian, and other major Linux distributions. 
 
 <!-- Uncomment and modify this when you are provided a build status badge
 <p align="center">
