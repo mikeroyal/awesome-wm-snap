@@ -1,6 +1,0 @@
-#!/bin/bash
-
-
-data=`$SNAP/usr/bin/qtpaths "$@"`
-data="$SNAP$data"
-echo $data
