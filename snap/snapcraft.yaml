@@ -1,4 +1,4 @@
-name: i3
+name: i3-wm
 version: 4.16.1
 summary: i3 window manger.
 description: A tiling window manager for X11.
@@ -12,7 +12,7 @@ architectures:
   - build-on: amd64
 
 apps:
-    i3:
+    i3-wm:
     command: bash
         slots: [mir, upower-observe]
         plugs:
@@ -85,9 +85,9 @@ slots:
         name: 
 
 parts:
+  i3-wm:
   i3:
-  i3:
-        stage-packages: [i3-workspace-wayland, i3, gdb, strace, vim, wayland-backend-x11, libxkbcommon-x11-0, libxkbcommon0, libx11-data, xkb-data, ltrace, kwrite, lxqt-workspace, konsole, kwin-wayland-backend-drm, libqt5sql5-sqlite]
+        stage-packages: [i3-workspace-wayland, i3-wm, gdb, strace, vim, wayland-backend-x11, libxkbcommon-x11-0, libxkbcommon0, libx11-data, xkb-data, ltrace, kwrite, lxqt-workspace, konsole, kwin-wayland-backend-drm, libqt5sql5-sqlite]
         plugin: dump
         source: empty
         organize:
@@ -96,12 +96,27 @@ parts:
         after: [i3]
         plugin: dump
         source: xwayland
-    source: http://http.us.debian.org/debian/i3_4.16.1-1_amd64.deb
+        
+   - on amd64: http://http.us.debian.org/debian/i3_4.16.1-1_amd64.deb
     source-type: deb
-   
+    override-build: |
+      ARCHITECTURE=$(dpkg --print-architecture)
+      if [ "${ARCHITECTURE}" = "amd64" ]; then
+        DEB_API="http://http.us.debian.org/debian/i3_4.16.1-1_amd64.deb"
+      else
+        echo "ERROR! i3 only produces debs for i386 or amd64. Failing the build here."
+        exit 1
+      fi
+      DEB_URL=$(curl -w "%{url_effective}\n" -I -L -s -S "${DEB_API}" -o /dev/null)
+      VERSION=$(echo "${DEB_URL}" | cut -d'_' -f2)
+      echo $VERSION > $SNAPCRAFT_STAGE/version
+      
+      snapcraftctl build
     build-packages:
-      - git
+      - curl
+      - dpkg
       - sed
+    stage-packages:
       - libcairo2 
       - libev4  
       - libglib2.0-0 
