@@ -1,9 +1,9 @@
-name: i3-wm
-version: 4.16.1
-summary: i3 window manger.
-description: A tiling window manager for X11.
+name: awesome-wm
+version: 4.3
+summary: awesome window manger.
+description: A highly configurable, next generation framework window manager for X.
   
-adopt-info:i3
+adopt-info:awesome
 
 grade: stable
 confinement: devmode
@@ -12,7 +12,7 @@ architectures:
   - build-on: amd64
 
 apps:
-    i3-wm:
+    awesome-wm:
     command: bash
         slots: [mir, upower-observe]
         plugs:
@@ -85,26 +85,26 @@ slots:
         name: 
 
 parts:
-  i3-wm:
-  i3:
-        stage-packages: [i3-workspace-wayland, i3-wm, gdb, strace, vim, wayland-backend-x11, libxkbcommon-x11-0, libxkbcommon0, libx11-data, xkb-data, ltrace, kwrite, lxqt-workspace, konsole, kwin-wayland-backend-drm, libqt5sql5-sqlite]
+  awesome-wm:
+  awesome:
+        stage-packages: [awesome-workspace-wayland, awesome-wm, gdb, strace, vim, wayland-backend-x11, libxkbcommon-x11-0, libxkbcommon0, libx11-data, xkb-data, ltrace, kwrite, lxqt-workspace, konsole, kwin-wayland-backend-drm, libqt5sql5-sqlite]
         plugin: dump
         source: empty
         organize:
             usr/bin/Xwayland: usr/bin/Xwayland.orig
     patchy:
-        after: [i3]
+        after: [awesome]
         plugin: dump
         source: xwayland
         
-   - on amd64: http://http.us.debian.org/debian/i3_4.16.1-1_amd64.deb
+   - on amd64: http://http.us.debian.org/debian/awesome_4.3-4_amd64.deb
     source-type: deb
     override-build: |
       ARCHITECTURE=$(dpkg --print-architecture)
       if [ "${ARCHITECTURE}" = "amd64" ]; then
-        DEB_API="http://http.us.debian.org/debian/i3_4.16.1-1_amd64.deb"
+        DEB_API="http://http.us.debian.org/debian/awesome_4.3-4_amd64.deb"
       else
-        echo "ERROR! i3 only produces debs for i386 or amd64. Failing the build here."
+        echo "ERROR! awesome only produces debs for i386 or amd64. Failing the build here."
         exit 1
       fi
       DEB_URL=$(curl -w "%{url_effective}\n" -I -L -s -S "${DEB_API}" -o /dev/null)
@@ -117,28 +117,39 @@ parts:
       - dpkg
       - sed
     stage-packages:
-      - libcairo2 
-      - libev4  
-      - libglib2.0-0 
-      - libpango-1.0-0 
-      - libpangocairo-1.0-0  
-      - libpcre3     
-      - libstartup-notification0 
-      - libxcb-cursor0 
-      - libxcb-icccm4       
-      - libxcb-keysyms1      
-      - libxcb-randr0      
-      - libxcb-util1       
-      - libxcb-xinerama0        
-      - libxcb-xkb1
-      - libxcb-xrm0 
-      - libxcb1 
-      - libxkbcommon-x11-0
-      - libxkbcommon0       
-      - libyajl2         
-      - perl       
-      - fonts-dejavu-core       
-      - libanyevent-i3-perl         
-      - libjson-xs-perl       
-      - rxvt-unicode    
-      - xfonts-base 
+     - dbus-session-bus  
+     - gir1.2-freedesktop
+     - gir1.2-gdkpixbuf-2.0
+     - gir1.2-glib-2.0       
+     - gir1.2-pango-1.0      
+     - libc6      
+     - libcairo-gobject2       
+     - libcairo2        
+     - libdbus-1-3        
+     - libgdk-pixbuf2.0-0 
+     - libglib2.0-0 
+     - liblua5.3-0
+     - libstartup-notification0      
+     - libx11-6      
+     - libxcb-cursor0 
+     - libxcb-icccm4
+     - libxcb-keysyms1 
+     - libxcb-randr0 
+     - libxcb-shape0
+     - libxcb-util1 
+     - libxcb-xinerama0     
+     - libxcb-xkb1
+     - libxcb-xrm0 
+     - libxcb-xtest0        
+     - libxcb1 
+     - libxdg-basedir1       
+     - libxkbcommon-x11-0
+     - libxkbcommon0 
+     - lua-lgi 
+     - menu
+     - awesome-extra      
+     - feh 
+     - gir1.2-gtk-3.0     
+     - rlwrap 
+     - x11-xserver-utils
+     - awesome-doc 
